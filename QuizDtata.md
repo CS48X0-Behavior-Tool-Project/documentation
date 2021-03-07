@@ -17,10 +17,156 @@ PUT http://localhost:8080/api/quizzes/1
 
 ###
 DELETE http://localhost:8080/api/quizzes/6
+
+#################################################
+############### User Attempt Quiz ###############
+
+### Get attempts by user id
+GET http://localhost:8080/api/users/1/attempts
+
+### Create an user attempt: Case 1
+POST http://localhost:8080/api/users/1/attempts
+
+### Create an user attempt: Case 2
+POST http://localhost:8080/api/users/1/attempts
+
+### Create/update an user attempt: Case 3
+POST http://localhost:8080/api/users/1/attempts
+
+### delete all the user attempts specify an user_id
+DELETE http://localhost:8080/api/users/1/attempts
+
+### Get all attempts for a quiz
+GET http://localhost:8080/api/quizzes/1/attempts
+
+
 ```
 
 
-## API call resquest examples
+# User Quiz Attempts API call resquest examples
+
+
+### **Get** attempts by user id **[API-1001]**
+GET http://localhost:8080/api/users/1/attempts 
+```
+GET http://localhost:8080/api/users/1/attempts
+
+Results:
+
+[
+  {
+    "id": 28,
+    "user_id": 1,
+    "attempt_id": 28,
+    "scores": 2,
+    "created_at": "2021-03-07 08:32:13",
+    "updated_at": "2021-03-07 08:38:34",
+    "options": null
+  },
+  {
+    "id": 29,
+    "user_id": 1,
+    "attempt_id": 29,
+    "scores": 0,
+    "created_at": "2021-03-07 08:32:28",
+    "updated_at": "2021-03-07 08:32:28",
+    "options": null
+  },
+  {
+    "id": 30,
+    "user_id": 1,
+    "attempt_id": 30,
+    "scores": 2,
+    "created_at": "2021-03-07 08:32:43",
+    "updated_at": "2021-03-07 08:38:23",
+    "options": null
+  }
+]
+```
+
+### **Create/update** user attempts
+### **Case 1**: Create an user attempt record, but when no quizzes has been taken. it will return the new created attempt_id and user_attempt_id **[API-1002]**
+
+POST http://localhost:8080/api/users/1/attempts
+
+```
+POST http://localhost:8080/api/users/1/attempts
+
+Results:
+
+{
+  "success": true,
+  "attempt_id": 31,
+  "user_attempt_id": 31
+}
+```
+### **Case 2**: Create an user attempt, together with taking the quiz (quizzes id=1 below) with all the student selected answers **[API-1003]**
+
+Sample Request: 
+```
+POST http://localhost:8080/api/users/1/attempts
+content-type: application/json
+
+{
+  "quiz_id": 1,
+  "behavior_answers": ["Smiling"],
+  "interpretation_answers": ["Happy", "sad"],
+  "scores": 1
+}
+```
+
+### **Case 3**: after user created an attempt to a quiz with answers, then they want to change the answer and re-submit. In this case, user_attempt_id needs to be provided as below. The user_attempt_id is come from: API-1001(the id), it id from the return record **[API-1004]**
+
+Sample Request: 
+```
+POST http://localhost:8080/api/users/1/attempts
+content-type: application/json
+
+{
+  "user_attempt_id": 1,
+  "behavior_answers": ["Smiling"],
+  "interpretation_answers": ["happy"],
+  "scores": 2
+}
+```
+
+### **Delete** all the user attempts specify an user_id, all the attempts including attempted quiz answers will be removed **[API-1005]** 
+DELETE http://localhost:8080/api/users/1/attempts 
+
+```
+DELETE http://localhost:8080/api/users/1/attempts
+```
+
+### **Get** all attempts for a quiz (question) **[API-1006]**
+GET http://localhost:8080/api/quizzes/1/attempts
+
+```
+GET http://localhost:8080/api/quizzes/1/attempts
+
+[
+  {
+    "id": 15,
+    "attempt_id": 30,
+    "quiz_id": 1,
+    "created_at": "2021-03-07 08:32:43",
+    "updated_at": "2021-03-07 08:32:43"
+  },
+  {
+    "id": 16,
+    "attempt_id": 32,
+    "quiz_id": 1,
+    "created_at": "2021-03-07 08:42:57",
+    "updated_at": "2021-03-07 08:42:57"
+  }
+]
+```
+
+
+
+
+
+
+# Quiz Creation API call resquest examples
 GET http://localhost:8080/api/quizzes  result:
 ```
 [
@@ -207,3 +353,4 @@ select q.*, o.
   on o.quiz_question_id = q.id
  where q.id=?
 ```
+

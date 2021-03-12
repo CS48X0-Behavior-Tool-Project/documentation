@@ -100,7 +100,7 @@ Results:
   "user_attempt_id": 31
 }
 ```
-### **Case 2**: Create an user attempt, together with taking the quiz (quizzes id=1 below) with all the student selected answers **[API-1003]**
+### **Case 2**: Create an user attempt, together with taking the quiz (quizzes id=2 below) with all the student selected answers **[API-1003]**
 
 Sample Request: 
 ```
@@ -108,10 +108,21 @@ POST http://localhost:8080/api/users/1/attempts
 content-type: application/json
 
 {
-  "quiz_id": 1,
-  "behavior_answers": ["Smiling"],
-  "interpretation_answers": ["Happy", "sad"],
-  "scores": 1
+  "quiz_id": 2,
+  "behavior_answers": ["Screaming"],
+  "interpretation_answers": [ "Fearful"]
+}
+
+
+==========Response will include scores:
+
+{
+  "success": true,
+  "scores": {
+    "behavior_scores": 1,
+    "interpretation_guess": true,
+    "scores": 2
+  }
 }
 ```
 
